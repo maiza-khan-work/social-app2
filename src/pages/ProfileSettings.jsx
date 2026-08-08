@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { CheckCircle2, Camera } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { fileToBase64 } from '../utils/helpers';
 import Input from '../components/Input';
@@ -51,28 +52,38 @@ export default function ProfileSettings() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Profile Settings</h1>
+      <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">Profile Settings</h1>
 
       {successMessage && (
-        <div className="rounded-lg bg-green-50 dark:bg-green-900/30 px-3 py-2 text-sm text-green-700 dark:text-green-300">
+        <div className="flex items-center gap-2 rounded-xl bg-success-50 dark:bg-success-500/10 border border-success-100 dark:border-success-500/20 px-4 py-3 text-sm font-medium text-success-600 dark:text-success-400 animate-fade-in">
+          <CheckCircle2 className="h-4 w-4 flex-shrink-0" strokeWidth={2.25} />
           {successMessage}
         </div>
       )}
 
-      <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-card">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <div className="surface-card p-5 sm:p-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           <div className="flex items-center gap-4">
-            <Avatar src={avatarPreview} name={currentUser.name} size="lg" />
-            <div>
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-200 block mb-1">
-                Profile picture
+            <div className="relative">
+              <Avatar src={avatarPreview} name={currentUser.name} size="lg" />
+              <label
+                htmlFor="avatar-upload"
+                className="absolute -bottom-1 -right-1 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-brand-500 to-accent-500 text-white shadow-md ring-2 ring-white dark:ring-gray-900 hover:shadow-glow transition-shadow"
+                aria-label="Change profile picture"
+              >
+                <Camera className="h-3.5 w-3.5" strokeWidth={2.25} />
               </label>
               <input
+                id="avatar-upload"
                 type="file"
                 accept="image/*"
                 onChange={handleAvatarChange}
-                className="block w-full text-sm text-gray-600 dark:text-gray-300 file:mr-4 file:rounded-lg file:border-0 file:bg-brand-500 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-brand-600"
+                className="hidden"
               />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">Profile picture</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500">Tap the camera icon to change it</p>
             </div>
           </div>
 
@@ -83,11 +94,11 @@ export default function ProfileSettings() {
           />
 
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-200">Bio</label>
+            <label className="text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-wide">Bio</label>
             <textarea
               rows={3}
               maxLength={MAX_BIO_LENGTH}
-              className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-brand-400 resize-none"
+              className="mt-1.5 w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/60 px-4 py-2.5 text-sm text-gray-900 dark:text-gray-100 outline-none shadow-sm focus:ring-4 focus:ring-brand-400/12 focus:border-brand-400 resize-none transition-all"
               {...register('bio', { maxLength: MAX_BIO_LENGTH })}
             />
             <div className="mt-1 text-right text-xs text-gray-400">
@@ -105,7 +116,7 @@ export default function ProfileSettings() {
 
           <Input label="Location" placeholder="City, Country" {...register('location')} />
 
-          <Button type="submit" isLoading={isSubmitting} className="mt-2 self-start">
+          <Button type="submit" isLoading={isSubmitting} className="mt-1 self-start">
             Save Changes
           </Button>
         </form>

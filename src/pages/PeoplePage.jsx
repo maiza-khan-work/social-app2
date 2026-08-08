@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { UserSearch } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useFriendsContext } from '../context/FriendsProvider';
 import storage from '../utils/storage';
@@ -26,13 +27,16 @@ export default function PeoplePage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-6">
-      <h1 className="mb-4 text-xl font-bold text-gray-900 dark:text-gray-100">
+      <h1 className="mb-4 text-xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
         People You May Know
       </h1>
 
       {people.length === 0 && (
-        <div className="rounded-xl bg-white dark:bg-gray-800 p-8 text-center text-gray-500 dark:text-gray-400 shadow-card">
-          No suggestions right now
+        <div className="surface-card p-10 text-center">
+          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-50 to-accent-50 dark:from-brand-500/10 dark:to-accent-500/10 text-brand-500">
+            <UserSearch className="h-6 w-6" strokeWidth={2} />
+          </div>
+          <p className="font-semibold text-gray-700 dark:text-gray-300">No suggestions right now</p>
         </div>
       )}
 

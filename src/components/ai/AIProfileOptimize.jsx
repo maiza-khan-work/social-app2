@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Sparkles } from 'lucide-react';
 import Button from '../Button';
 import { useAI } from '../../hooks/useAI';
 
@@ -30,14 +31,18 @@ export default function AIProfileOptimize({ bio, name, location, onUseSuggestion
   return (
     <div className="mt-2">
       <Button type="button" size="sm" variant="secondary" disabled={loading} onClick={handleClick}>
-        {loading ? 'Optimising…' : '✨ Optimise with AI'}
+        <Sparkles className={loading ? 'h-3.5 w-3.5 animate-pulse-soft' : 'h-3.5 w-3.5'} strokeWidth={2.25} />
+        {loading ? 'Optimising…' : 'Optimise with AI'}
       </Button>
 
       {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
 
       {suggestion && (
-        <div className="mt-2 rounded-lg bg-gray-50 dark:bg-gray-700/50 p-3">
-          <p className="mb-2 text-sm text-gray-700 dark:text-gray-200">Suggested bio: {suggestion}</p>
+        <div className="mt-2 rounded-lg bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700/60 p-3 animate-scale-in">
+          <p className="mb-2 text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
+            <span className="font-semibold text-gray-900 dark:text-gray-100">Suggested bio: </span>
+            {suggestion}
+          </p>
           <Button type="button" size="sm" onClick={() => onUseSuggestion(suggestion)}>
             Use Suggestion
           </Button>

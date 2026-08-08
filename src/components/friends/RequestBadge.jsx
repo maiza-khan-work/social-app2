@@ -6,7 +6,7 @@
 export default function RequestBadge({ count }) {
   if (!count) return null;
   return (
-    <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
+    <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white ring-2 ring-white dark:ring-gray-900 animate-pop-in">
       {count > 9 ? '9+' : count}
     </span>
   );

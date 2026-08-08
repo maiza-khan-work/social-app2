@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Sparkles } from 'lucide-react';
 import { useAI } from '../../hooks/useAI';
 
 /**
@@ -31,9 +32,10 @@ export default function AICommentSuggest({ postDescription, onSuggestion }) {
         type="button"
         onClick={handleClick}
         disabled={loading}
-        className="text-sm font-medium text-brand-600 hover:underline disabled:opacity-50 dark:text-brand-400"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 hover:text-brand-700 disabled:opacity-50 dark:text-brand-400 dark:hover:text-brand-300 transition-colors"
       >
-        {loading ? 'Thinking…' : '✨ Suggest Comment'}
+        <Sparkles className={loading ? 'h-3.5 w-3.5 animate-pulse-soft' : 'h-3.5 w-3.5'} strokeWidth={2.25} />
+        {loading ? 'Thinking…' : 'Suggest Comment'}
       </button>
       {error && <span className="text-xs text-red-500">{error}</span>}
     </div>

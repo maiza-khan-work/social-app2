@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import clsx from 'clsx';
+import { ArrowLeft, ChevronDown, MessageCircleOff, MessagesSquare, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatProvider';
 import { useAI } from '../hooks/useAI';
@@ -133,11 +134,11 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-5xl overflow-hidden">
+    <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-5xl overflow-hidden rounded-none sm:rounded-2xl sm:my-4 sm:h-[calc(100vh-6rem)] sm:shadow-elevated sm:border sm:border-gray-100 dark:sm:border-gray-800 bg-white dark:bg-gray-900">
       {/* Sidebar — full width on mobile until a conversation is open */}
       <aside
         className={clsx(
-          'w-full flex-shrink-0 border-r border-gray-200 dark:border-gray-700 sm:w-80',
+          'w-full flex-shrink-0 border-r border-gray-100 dark:border-gray-800 sm:w-80',
           friend ? 'hidden sm:block' : 'block'
         )}
       >
@@ -147,66 +148,71 @@ export default function ChatPage() {
       {/* Conversation panel */}
       <section className={clsx('flex-1 flex-col', friend ? 'flex' : 'hidden sm:flex')}>
         {!friend && (
-          <div className="flex flex-1 items-center justify-center text-sm text-gray-500 dark:text-gray-400">
-            Select a conversation to start chatting
+          <div className="flex flex-1 flex-col items-center justify-center gap-3 text-center px-6">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-50 to-accent-50 dark:from-brand-500/10 dark:to-accent-500/10 text-brand-500">
+              <MessagesSquare className="h-6 w-6" strokeWidth={2} />
+            </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Select a conversation to start chatting</p>
           </div>
         )}
 
         {friend && (
           <div className="flex h-full flex-col">
             {/* Header */}
-            <div className="flex items-center gap-3 border-b border-gray-200 px-4 py-3 dark:border-gray-700">
+            <div className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-800 px-4 py-3 glass">
               <button
                 type="button"
                 onClick={() => navigate('/chat')}
-                className="text-lg sm:hidden"
+                className="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-gray-300 sm:hidden transition-colors"
                 aria-label="Back to conversations"
               >
-                ←
+                <ArrowLeft className="h-4 w-4" strokeWidth={2.25} />
               </button>
-              <Link to={`/profile/${friend.id}`} className="relative flex-shrink-0">
-                <Avatar src={friend.avatar} name={friend.name} />
-                {isUserOnline(friend) && (
-                  <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-500 dark:border-gray-800" />
-                )}
+              <Link to={`/profile/${friend.id}`} className="flex-shrink-0">
+                <Avatar src={friend.avatar} name={friend.name} online={isUserOnline(friend)} />
               </Link>
               <div className="min-w-0 flex-1">
                 <Link
                   to={`/profile/${friend.id}`}
-                  className="font-bold text-gray-900 hover:underline dark:text-gray-100"
+                  className="font-bold text-gray-900 hover:text-brand-500 dark:text-gray-100 dark:hover:text-brand-400 transition-colors"
                 >
                   {friend.name}
                 </Link>
-                <p className="text-xs text-gray-400">{isUserOnline(friend) ? 'Online' : 'Offline'}</p>
+                <p className="text-xs text-gray-400 flex items-center gap-1">
+                  {isUserOnline(friend) && <span className="h-1.5 w-1.5 rounded-full bg-success-500" />}
+                  {isUserOnline(friend) ? 'Online' : 'Offline'}
+                </p>
               </div>
 
               <div className="relative flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => setAiMenuOpen((o) => !o)}
-                  className="rounded-lg px-2 py-1 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="flex items-center gap-1 rounded-full bg-gray-100 dark:bg-gray-800 px-3 py-1.5 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                 >
-                  AI ✨
+                  <Sparkles className="h-3.5 w-3.5 text-accent-500" strokeWidth={2.25} />
+                  AI
+                  <ChevronDown className={clsx('h-3.5 w-3.5 transition-transform', aiMenuOpen && 'rotate-180')} strokeWidth={2.25} />
                 </button>
                 {aiMenuOpen && (
-                  <div className="absolute right-0 z-10 mt-1 w-48 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                  <div className="absolute right-0 z-10 mt-2 w-52 rounded-xl border border-gray-100 bg-white py-1.5 shadow-popover dark:border-gray-800 dark:bg-gray-800 animate-scale-in origin-top-right">
                     <button
                       type="button"
-                      className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="block w-full px-3.5 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700/60 transition-colors"
                       onClick={() => setAiMode(false)}
                     >
                       Suggest replies only
                     </button>
                     <button
                       type="button"
-                      className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="block w-full px-3.5 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700/60 transition-colors"
                       onClick={() => setAiMode(true)}
                     >
                       Let AI reply for me
                     </button>
                     <button
                       type="button"
-                      className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="block w-full px-3.5 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700/60 transition-colors"
                       onClick={() => setAiMode(false)}
                     >
                       Turn off AI
@@ -218,7 +224,7 @@ export default function ChatPage() {
 
             {aiChatEnabled && <AIChatBanner onDisable={() => setAiMode(false)} />}
             {autoReplyToast && (
-              <div className="bg-red-50 px-4 py-1.5 text-center text-xs text-red-600 dark:bg-red-900/30 dark:text-red-300">
+              <div className="bg-red-50 px-4 py-1.5 text-center text-xs font-medium text-red-600 dark:bg-red-900/30 dark:text-red-300 animate-fade-in">
                 {autoReplyToast}
               </div>
             )}
@@ -226,10 +232,15 @@ export default function ChatPage() {
             {/* Messages */}
             <div className="flex flex-1 flex-col gap-3 overflow-y-auto px-4 py-4">
               {conversationMessages.length === 0 && (
-                <p className="mt-6 text-center text-sm text-gray-400">Say hello to {friend.name} 👋</p>
+                <div className="mt-6 flex flex-col items-center gap-2 text-center">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-400">
+                    <MessageCircleOff className="h-5 w-5" strokeWidth={2} />
+                  </div>
+                  <p className="text-sm text-gray-400">Say hello to {friend.name} 👋</p>
+                </div>
               )}
               {conversationMessages.map((m, idx) => (
-                <div key={m.id} className="flex flex-col gap-2">
+                <div key={m.id} className="flex flex-col gap-2 animate-fade-in">
                   <MessageBubble
                     message={m}
                     isOwn={m.senderId === currentUser.id}

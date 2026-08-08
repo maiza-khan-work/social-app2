@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import Button from '../Button';
+import { Paperclip, Send } from 'lucide-react';
 import MediaPreview from './MediaPreview';
 import { fileToBase64 } from '../../utils/helpers';
 
@@ -63,7 +63,7 @@ export default function MessageInput({ onSend, disabled }) {
   const sendDisabled = disabled || (!text.trim() && !pendingFile);
 
   return (
-    <div className="border-t border-gray-200 p-3 dark:border-gray-700">
+    <div className="border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-3">
       {fileError && <p className="mb-2 text-xs text-red-500">{fileError}</p>}
       {pendingFile && <MediaPreview file={pendingFile} onRemove={() => setPendingFile(null)} />}
 
@@ -71,10 +71,10 @@ export default function MessageInput({ onSend, disabled }) {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="flex-shrink-0 rounded-full p-2 text-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="flex-shrink-0 rounded-full p-2 text-gray-400 hover:bg-gray-100 hover:text-brand-500 dark:hover:bg-gray-800 dark:hover:text-brand-400 transition-colors"
           aria-label="Attach image or video"
         >
-          📎
+          <Paperclip className="h-5 w-5" strokeWidth={2} />
         </button>
         <input
           ref={fileInputRef}
@@ -91,12 +91,18 @@ export default function MessageInput({ onSend, disabled }) {
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           placeholder="Type a message..."
-          className="max-h-20 flex-1 resize-none rounded-2xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-brand-400 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+          className="max-h-20 flex-1 resize-none rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 outline-none transition-all focus:border-brand-400 focus:ring-4 focus:ring-brand-400/12 focus:bg-white dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-100 dark:focus:bg-gray-800"
         />
 
-        <Button size="sm" disabled={sendDisabled} onClick={handleSend} className="flex-shrink-0">
-          Send
-        </Button>
+        <button
+          type="button"
+          disabled={sendDisabled}
+          onClick={handleSend}
+          aria-label="Send message"
+          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-brand-500 to-accent-500 text-white shadow-sm transition-all active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-glow"
+        >
+          <Send className="h-4 w-4" strokeWidth={2.25} />
+        </button>
       </div>
     </div>
   );

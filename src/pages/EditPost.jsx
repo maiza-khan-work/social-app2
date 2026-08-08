@@ -31,8 +31,8 @@ export default function EditPost() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Edit Post</h1>
-      <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-card">
+      <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">Edit Post</h1>
+      <div className="surface-card p-5">
         <PostForm
           initialValues={{
             description: post.description,

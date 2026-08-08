@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { ChevronDown, Sparkles } from 'lucide-react';
+import clsx from 'clsx';
 import Button from '../Button';
 import { useAI } from '../../hooks/useAI';
 
@@ -32,24 +34,30 @@ export default function AIPostAssistant({ onUseContent }) {
   }
 
   return (
-    <div className="mb-4 rounded-xl border border-brand-200 dark:border-brand-800 overflow-hidden">
+    <div className="mb-4 rounded-xl border border-brand-100 dark:border-brand-800/60 overflow-hidden shadow-sm">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between bg-brand-50 dark:bg-brand-900/20 px-4 py-2.5 text-sm font-semibold text-brand-700 dark:text-brand-300"
+        className="flex w-full items-center justify-between bg-gradient-to-r from-brand-50 to-accent-50 dark:from-brand-900/20 dark:to-accent-900/20 px-4 py-2.5 text-sm font-semibold text-brand-700 dark:text-brand-300"
       >
-        <span>✨ AI Writing Assistant</span>
-        <span>{open ? '▲' : '▼'}</span>
+        <span className="inline-flex items-center gap-1.5">
+          <Sparkles className="h-4 w-4" strokeWidth={2.25} />
+          AI Writing Assistant
+        </span>
+        <ChevronDown
+          className={clsx('h-4 w-4 transition-transform duration-200', open && 'rotate-180')}
+          strokeWidth={2.25}
+        />
       </button>
 
       {open && (
-        <div className="space-y-3 p-4">
+        <div className="space-y-3 p-4 animate-slide-up">
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Give the AI a short idea, e.g. 'I just completed a React project'"
             rows={2}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-brand-400"
+            className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-4 focus:ring-brand-400/15 focus:border-brand-400 transition-all"
           />
 
           <Button type="button" size="sm" disabled={loading || !prompt.trim()} onClick={handleGenerate}>
@@ -59,8 +67,8 @@ export default function AIPostAssistant({ onUseContent }) {
           {error && <p className="text-sm text-red-500">{error}</p>}
 
           {result && (
-            <div className="rounded-lg bg-gray-50 dark:bg-gray-700/50 p-3">
-              <p className="mb-2 text-sm text-gray-700 dark:text-gray-200">{result}</p>
+            <div className="rounded-lg bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700/60 p-3 animate-scale-in">
+              <p className="mb-2 text-sm text-gray-700 dark:text-gray-200 leading-relaxed">{result}</p>
               <Button type="button" size="sm" variant="secondary" onClick={() => onUseContent(result)}>
                 Use This Content
               </Button>

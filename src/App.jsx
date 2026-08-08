@@ -30,7 +30,10 @@ const ChatPage = lazy(() => import('./pages/ChatPage'));
 function PageLoader() {
   return (
     <div className="flex items-center justify-center py-24">
-      <span className="h-8 w-8 animate-spin rounded-full border-4 border-brand-500 border-t-transparent" />
+      <span className="relative h-10 w-10">
+        <span className="absolute inset-0 rounded-full border-4 border-brand-100 dark:border-brand-500/20" />
+        <span className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-brand-500 border-r-accent-500" />
+      </span>
     </div>
   );
 }
@@ -51,7 +54,7 @@ export default function App() {
     <PostsProvider>
       <FriendsProvider>
         <ChatProvider>
-          <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-900">
+          <div className="flex min-h-screen flex-col bg-[#F5F7FF] dark:bg-gray-950">
             <Navbar theme={theme} onToggleTheme={toggleTheme} />
 
             <div className="flex-1">

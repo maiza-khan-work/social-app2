@@ -1,4 +1,5 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Bell, MessageCircle, Moon, Sun, Users, UserSearch } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useFriendsContext } from '../context/FriendsProvider';
 import { useChatContext } from '../context/ChatProvider';
@@ -9,10 +10,10 @@ import RequestBadge from './friends/RequestBadge';
 
 // Assignment 2: friend system + chat nav links.
 const NAV_LINKS = [
-  { to: '/people', label: 'People', icon: '🧑‍🤝‍🧑' },
-  { to: '/requests', label: 'Requests', icon: '🔔' },
-  { to: '/friends', label: 'Friends', icon: '👥' },
-  { to: '/chat', label: 'Chat', icon: '💬' },
+  { to: '/people', label: 'People', Icon: UserSearch },
+  { to: '/requests', label: 'Requests', Icon: Bell },
+  { to: '/friends', label: 'Friends', Icon: Users },
+  { to: '/chat', label: 'Chat', Icon: MessageCircle },
 ];
 
 export default function Navbar({ theme, onToggleTheme }) {
@@ -38,12 +39,17 @@ export default function Navbar({ theme, onToggleTheme }) {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
+    <header className="sticky top-0 z-40 glass border-b border-white/60 dark:border-gray-700/60 shadow-[0_1px_0_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.10)]">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-2.5">
-        <Link to="/" className="text-xl font-extrabold text-brand-500">
+        {/* Brand Logo */}
+        <Link
+          to="/"
+          className="text-xl font-extrabold gradient-text tracking-tight hover:opacity-90 transition-opacity"
+        >
           SocialApp
         </Link>
 
+        {/* Desktop Nav Links */}
         {isAuthenticated && (
           <nav className="hidden items-center gap-1 sm:flex">
             {NAV_LINKS.map((link) => (
@@ -51,15 +57,14 @@ export default function Navbar({ theme, onToggleTheme }) {
                 key={link.to}
                 to={link.to}
                 className={({ isActive }) =>
-                  `relative flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-300'
-                      : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
+                  `relative flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-semibold transition-all duration-200 ${isActive
+                    ? 'bg-gradient-to-r from-brand-500 to-accent-500 text-white shadow-sm'
+                    : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800/60'
                   }`
                 }
               >
                 <span className="relative">
-                  {link.icon}
+                  <link.Icon className="h-4 w-4" strokeWidth={2.25} />
                   {badgeFor(link.to) > 0 && <RequestBadge count={badgeFor(link.to)} />}
                 </span>
                 {link.label}
@@ -68,24 +73,30 @@ export default function Navbar({ theme, onToggleTheme }) {
           </nav>
         )}
 
-        <div className="flex items-center gap-3">
+        {/* Right side: theme toggle + user actions */}
+        <div className="flex items-center gap-2">
+          {/* Dark mode toggle */}
           <button
             type="button"
             onClick={onToggleTheme}
             aria-label="Toggle dark mode"
-            className="rounded-full p-2 text-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all active:scale-90"
           >
-            {theme === 'dark' ? '☀️' : '🌙'}
+            {theme === 'dark' ? (
+              <Sun className="h-[18px] w-[18px]" strokeWidth={2.25} />
+            ) : (
+              <Moon className="h-[18px] w-[18px]" strokeWidth={2.25} />
+            )}
           </button>
 
           {isAuthenticated ? (
             <>
               <Link
                 to={`/profile/${currentUser.id}`}
-                className="flex items-center gap-2 rounded-full px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center gap-2 rounded-full px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition-colors"
               >
                 <Avatar src={currentUser.avatar} name={currentUser.name} size="sm" />
-                <span className="hidden sm:inline text-sm font-medium text-gray-700 dark:text-gray-200">
+                <span className="hidden sm:inline text-sm font-semibold text-gray-700 dark:text-gray-200">
                   {currentUser.name}
                 </span>
               </Link>
@@ -107,21 +118,20 @@ export default function Navbar({ theme, onToggleTheme }) {
         </div>
       </div>
 
-      {/* Mobile bottom-ish nav for friend/chat links */}
+      {/* Mobile bottom nav for friend/chat links */}
       {isAuthenticated && (
-        <nav className="flex items-center justify-around border-t border-gray-100 dark:border-gray-700 sm:hidden">
+        <nav className="flex items-center justify-around border-t border-gray-100/80 dark:border-gray-700/60 sm:hidden bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm">
           {NAV_LINKS.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
               className={({ isActive }) =>
-                `relative flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] font-medium ${
-                  isActive ? 'text-brand-500' : 'text-gray-500 dark:text-gray-400'
+                `relative flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] font-semibold transition-colors ${isActive ? 'text-brand-500' : 'text-gray-500 dark:text-gray-400'
                 }`
               }
             >
-              <span className="relative text-base">
-                {link.icon}
+              <span className="relative">
+                <link.Icon className="h-[18px] w-[18px]" strokeWidth={2.25} />
                 {badgeFor(link.to) > 0 && <RequestBadge count={badgeFor(link.to)} />}
               </span>
               {link.label}

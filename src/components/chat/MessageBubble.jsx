@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import clsx from 'clsx';
+import { Sparkles } from 'lucide-react';
 import Avatar from '../Avatar';
 import Modal from '../Modal';
 import { formatDate } from '../../utils/helpers';
@@ -14,14 +15,18 @@ export default function MessageBubble({ message, isOwn, senderAvatar, senderName
       <div className={clsx('flex max-w-[70%] flex-col gap-1', isOwn ? 'items-end' : 'items-start')}>
         <div
           className={clsx(
-            'px-4 py-2 text-sm',
+            'px-4 py-2 text-sm shadow-sm',
             isOwn
-              ? 'bg-blue-600 text-white rounded-2xl rounded-br-sm'
-              : 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-100 rounded-2xl rounded-bl-sm'
+              ? 'bg-gradient-to-br from-brand-500 to-brand-600 text-white rounded-2xl rounded-br-sm'
+              : 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-2xl rounded-bl-sm'
           )}
         >
           {message.aiGenerated && (
-            <span className="mr-1 align-middle" title="AI generated message">✨</span>
+            <Sparkles
+              className={clsx('mr-1 inline-block h-3.5 w-3.5 align-middle', isOwn ? 'text-white/80' : 'text-accent-500')}
+              strokeWidth={2.25}
+              aria-label="AI generated message"
+            />
           )}
 
           {message.type === 'text' && <span className="whitespace-pre-wrap">{message.content}</span>}
